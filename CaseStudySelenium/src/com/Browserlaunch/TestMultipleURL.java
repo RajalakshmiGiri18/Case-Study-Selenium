@@ -1,67 +1,61 @@
 package com.Browserlaunch;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.TestNG;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
 
 public class TestMultipleURL {
-	WebDriver driver;
-	String[] urls = { "http://automationpractice.com/index.php", "https://www.example.com", "https://www.google.com",
-			"https://www.wikipedia.org", "https://www.github.com" };
+    public static void main(String[] args) {
+        
+        System.setProperty("webdriver.chrome.driver", "./ChromeDriverJars/chromedriver.exe");
+        System.setProperty("webdriver.gecko.driver", "./FirefoxDriver/geckodriver.exe");
+        System.setProperty("webdriver.edge.driver", "./EdgeBrowserJars/msedgedriver.exe");
+        String[] urls = {
+            "https://themeforest.net/",
+            "https://demo.opencart.com/",
+            "https://www.rediff.com/",
+            "http://www.leafground.com/pages/Dropdown.html",
+            "http://www.tizag.com/javascriptT/javascriptalert.php",
+            "http://www.echoecho.com/htmlforms10.htm",
+            "http://www.leafground.com/home.html",
+            "http://automationpractice.com/index.php",
+            "https://login.salesforce.com/?locale=in",
+            "http://www.filehosting.org/",
+            "http://www.bing.com/",
+            "https://www.freecrm.com/",
+            "http://www.half.ebay.com/",
+            "https://alaskatrips.poweredbygps.com/",
+            "http://www.qaclickacademy.com/interview.php",
+            "https://app.saucelabs.com/login",
+            "https://opensource-demo.orangehrmlive.com/",
+            "http://only-testing-blog.blogspot.com/2014/05/form.html",
+            "https://admin-demo.nopcommerce.com/Admin/Order/List",
+            "https://auth.hollandandbarrett.com/u/login"
+        };
 
-	@BeforeMethod
-	@Parameters("browser")
-	public void setup(@Optional("chrome") String browser) {
-		try {
-			System.out.println("Browser: " + browser);
-			if (browser.equalsIgnoreCase("chrome")) {
-				System.setProperty("webdriver.chrome.driver", "./ChromeDriverJars/chromedriver.exe");
-				driver = new ChromeDriver();
-			} else if (browser.equalsIgnoreCase("edge")) {
-				System.setProperty("webdriver.edge.driver", "./EdgeBrowserJars/msedgedriver.exe");
-				driver = new EdgeDriver();
-			} else if (browser.equalsIgnoreCase("firefox")) {
-				System.setProperty("webdriver.gecko.driver", "./FirefoxDriver/geckodriver.exe");
-				driver = new FirefoxDriver();
-			}
-			driver.manage().window().maximize();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to initialize the WebDriver for browser: " + browser);
-		}
-	}
+        for (String url : urls) { 
+            WebDriver chromeDriver = new ChromeDriver();
+            chromeDriver.get(url);
+            waitAndQuit(chromeDriver);
 
-	@Test
-	public void testURLs() throws Exception {
-		for (String url : urls) {
-			driver.get(url);
-			System.out.println("Title: " + driver.getTitle());
-			System.out.println("Title Length: " + driver.getTitle().length());
-			String pagesrc = driver.getPageSource();
-			System.out.println("Page Source Length: " + pagesrc.length());
-		}
-	}
+            WebDriver edgeDriver = new EdgeDriver();
+            edgeDriver.get(url);
+            waitAndQuit(edgeDriver);
 
-	@AfterMethod
-	public void tearDown() {
-		if (driver != null) {
-			driver.quit();
-		}
-	}
+            
+            WebDriver firefoxDriver = new FirefoxDriver();
+            firefoxDriver.get(url);
+            waitAndQuit(firefoxDriver);
+        }
+    }
 
-	public static void main(String[] args) {
-		TestNG testng = new TestNG();
-		testng.setTestClasses(new Class[] { TestMultipleURL.class });
-		testng.setDefaultSuiteName("Suite");
-		testng.setDefaultTestName("Test");
-		testng.setGroups("chrome,edge,firefox");
-		testng.run();
-	}
+    private static void waitAndQuit(WebDriver driver) {
+   
+        try {
+            Thread.sleep(1000); // Wait for 5 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driver.quit();
+    }
 }
