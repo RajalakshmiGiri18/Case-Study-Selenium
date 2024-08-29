@@ -3,11 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.Locators.NopComm">
+      <class name="com.Screenshot.Screenshot">
         <methods>
-          <include name="ExampleID"/>
+          <include name="testInChrome"/>
+          <include name="testInEdge"/>
         </methods>
-      </class> <!-- com.Locators.NopComm -->
+      </class> <!-- com.Screenshot.Screenshot -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
