@@ -7,59 +7,50 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import org.apache.commons.io.FileUtils;
 
 public class Screenshot {
     WebDriver driver;
 
     @Test
-    public void testInChrome() {
+    public void performTest() throws IOException, InterruptedException {
         System.setProperty("webdriver.chrome.driver", "./ChromeDriverJars/chromedriver.exe");
         driver = new ChromeDriver();
-        performTest();
-    }
+        driver.manage().window().maximize();
+        driver.get("https://www.hollandandbarrett.com/"); 
+        // Wait for the overlay to disappear
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("onetrust-accept-btn-handler")));
 
-    @Test
-    public void testInEdge() {
-        System.setProperty("webdriver.edge.driver", "./EdgeBrowserJars/msedgedriver.exe");
-        driver = new EdgeDriver();
-        performTest();
-    }
+         
+        WebElement element = driver.findElement(By.className("MyHB-module_container__GPBlR"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
-    public void performTest() {
- 
-            driver.manage().window().maximize();
-            driver.get("https://www.hollandandbarrett.com/");
+        Thread.sleep(2000);
+        WebElement signInButton = driver.findElement(By.xpath("//*[@id=\"_root_\"]/div[1]/div[3]/div[1]/div[2]/a"));
+        signInButton.click();
 
-            WebElement signInButton = driver.findElement(By.xpath("//a[@href='/u/login']"));
-            signInButton.click();
+        WebElement username = driver.findElement(By.id("username"));
+        WebElement password = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.name("action"));
 
-            WebElement username = driver.findElement(By.id("username"));
-            WebElement password = driver.findElement(By.id("password"));
-            WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        username.sendKeys("raghu.astepahead@gmail.com");
+        password.sendKeys("raghuBN@123");
+        loginButton.click();
 
-            username.sendKeys("your_username");
-            password.sendKeys("your_password");
-            loginButton.click();
-
-            WebElement rewardsLink = driver.findElement(By.linkText("Rewards"));
-            rewardsLink.click();
-            takeScreenshot("screenshot.png");
-            WebElement accountElement = driver.findElement(By.id("account"));       
-            driver.quit();
+        WebElement rewardsLink = driver.findElement(By.linkText("Rewards"));
+        rewardsLink.click();
         
-    }
-
-    public void takeScreenshot(String fileName) {
-        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        try {
-            FileUtils.copyFile(screenshot, new File(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(src, new File("./screenshot/google.png"));       
+        driver.quit();
     }
 }

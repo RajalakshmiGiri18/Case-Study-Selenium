@@ -5,8 +5,7 @@
     <classes>
       <class name="com.Screenshot.Screenshot">
         <methods>
-          <include name="testInChrome"/>
-          <include name="testInEdge"/>
+          <include name="performTest"/>
         </methods>
       </class> <!-- com.Screenshot.Screenshot -->
     </classes>
